@@ -1,4 +1,4 @@
-import getDistanceBetweenTwoPoints from './../helpers/getDistanceBetweenTwoPoints';
+// import getDistanceBetweenTwoPoints from './../helpers/getDistanceBetweenTwoPoints';
 
 import cherryImgAsset1 from './../../assets/images/cherry6_copy.png';
 import cherryImgAsset2 from './../../assets/images/cherry4.png';
@@ -9,7 +9,7 @@ let GRAVITY = 0.2;
 export default class Cherry {
   constructor(ctx, canvasEl, width, height, x, y) {
     this.ctx = ctx;
-    this.canvasEl = canvasEl;
+    // this.canvasEl = canvasEl;
     this.cherryImg = new Image();
     this.cherryImg.src = [cherryImgAsset1, cherryImgAsset2, cherryImgAsset3][Math.floor(Math.random() * Math.floor(3))];
     this.width = width;
@@ -21,8 +21,8 @@ export default class Cherry {
     this.fx = 0;
     this.fy = 0;
     this.radius = this.height / (2 + Math.random() * 3);
-    this.speed = 0.3;
-    this.isFailed = false;
+    // this.speed = 0.3;
+    // this.isFailed = false;
   }
 
   draw() {

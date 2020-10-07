@@ -14,15 +14,25 @@ const size = 90;
 let DAMPING = 0.7;
 let SPEED = 1;
 
-const debounce = createDebounce(1e2);
+const debounceForCherries = createDebounce(1e2);
+const debounceForResize = createDebounce(5e2);
 
-window.addEventListener('scroll', () => debounce(() => {
+window.addEventListener('resize', () => debounceForResize(() => {
+  canvasInit();
+}));
+
+window.addEventListener('scroll', () => debounceForCherries(() => {
     let xPos = getRandomInt(0, canvasEl.width - size);
     let yPos = getRandomInt(size * (-10), size * (-7));
 
     cherries.push(
-      new Cherry(ctx, canvasEl, size, size, xPos, yPos)
+      new Leaf(ctx, canvasEl, size, size, xPos, yPos)
+      // new Cherry(ctx, canvasEl, size, size, xPos, yPos)
     );
+
+    // leafs.push(
+    //   new Leaf(ctx, canvasEl, size, size, xPos, yPos)
+    // );
 }));
 
 window.requestAnimFrame =
@@ -131,7 +141,6 @@ const check_walls = function() {
     }
   }
 };
-
 
 const animation = () => {
   ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
