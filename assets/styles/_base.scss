@@ -1,5 +1,7 @@
 html * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
@@ -11,20 +13,29 @@ body {
   background-color: rgb(1, 54, 1);
 }
 
+main {
+  background-image: radial-gradient(circle, rgba(2,0,36,0) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,0.773546918767507) 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
 body, html {
   height: 100%;
 }
 
 .content {
+  height: 150vh;
   position: relative;
   width: 100%;
   max-width: 300px;
   margin: auto;
-  z-index: 2;
+  color: white;
+  z-index: -1;
 }
 
 #canvas {
   position: fixed;
   left: 0;
   top: 0;
+  z-index: -1;
 }
