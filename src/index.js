@@ -7,32 +7,36 @@ import getRandomInt from './helpers/getRandomInt';
 import './../assets/styles/main.scss';
 
 const [canvasEl, ctx] = canvasInit();
-const cherries = [];
+const objects = [];
 
 const size = 90;
 
-let DAMPING = 0.7;
+let DAMPING = 0.2;
 let SPEED = 1;
 
-const debounceForCherries = createDebounce(1e2);
-const debounceForResize = createDebounce(5e2);
+const debounceForObjects = createDebounce(1e2);
+const debounceForResize = createDebounce(3e2);
 
 window.addEventListener('resize', () => debounceForResize(() => {
+  const canvasArea = canvasEl.width * canvasEl.height;
+  const objectsArea = objects.length * (Math.PI * Math.pow(size / 3, 2));
   canvasInit();
+  if (canvasArea < objectsArea) objects.length = 0;
 }));
 
-window.addEventListener('scroll', () => debounceForCherries(() => {
-    let xPos = getRandomInt(0, canvasEl.width - size);
+window.addEventListener('scroll', () => debounceForObjects(() => {
+    let xPos = getRandomInt((canvasEl.width - size) / 3, (canvasEl.width - size) / 3 * 2);
     let yPos = getRandomInt(size * (-10), size * (-7));
 
-    cherries.push(
-      new Leaf(ctx, canvasEl, size, size, xPos, yPos)
-      // new Cherry(ctx, canvasEl, size, size, xPos, yPos)
-    );
+  const canvasArea = canvasEl.width * canvasEl.height;
+  const objectsArea = objects.length * (Math.PI * Math.pow(size / 3, 2));
+  const canvasIsNotFilled = canvasArea > objectsArea;
 
-    // leafs.push(
-    //   new Leaf(ctx, canvasEl, size, size, xPos, yPos)
-    // );
+  if (canvasIsNotFilled) objects.push(
+      Math.random() * 100 < 90
+      ? new Cherry(ctx, canvasEl, size, size, xPos, yPos)
+      : new Leaf(ctx, canvasEl, size, size, xPos, yPos)
+    );
 }));
 
 window.requestAnimFrame =
@@ -47,19 +51,19 @@ window.requestAnimFrame =
 
 const resolve_collisions = function(ip) {
 
-  let i = cherries.length;
+  let i = objects.length;
 
   while (i--) {
 
-    const ball_1 = cherries[i];
+    const ball_1 = objects[i];
 
-    let n = cherries.length;
+    let n = objects.length;
 
     while (n--) {
 
       if (n === i) continue;
 
-      let ball_2 = cherries[n];
+      let ball_2 = objects[n];
 
       let diff_x = ball_1.x - ball_2.x;
       let diff_y = ball_1.y - ball_2.y;
@@ -108,11 +112,11 @@ const resolve_collisions = function(ip) {
 
 const check_walls = function() {
 
-  let i = cherries.length;
+  let i = objects.length;
 
   while (i--) {
 
-    let ball = cherries[i];
+    let ball = objects[i];
 
     if (ball.x < ball.radius) {
 
@@ -145,31 +149,31 @@ const check_walls = function() {
 const animation = () => {
   ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
 
-  let iter = 3;
+  let iter = 1;
 
   const delta = SPEED / iter;
 
   while (iter--) {
 
-    let it = cherries.length;
+    let it = objects.length;
 
     while (it--) {
-      cherries[it].apply_force(delta);
-      cherries[it].verlet();
+      objects[it].apply_force(delta);
+      objects[it].verlet();
     }
 
     resolve_collisions();
     check_walls();
 
-    let i = cherries.length;
-    while (i--) cherries[i].verlet();
+    let i = objects.length;
+    while (i--) objects[i].verlet();
 
     resolve_collisions(1);
     check_walls();
   }
 
-  let i = cherries.length;
-  while (i--) cherries[i].draw(ctx);
+  let i = objects.length;
+  while (i--) objects[i].draw(ctx);
 
   requestAnimFrame(animation);
 };

@@ -15,6 +15,11 @@ export default class Leaf {
     this.height = height;
     this.y = y;
     this.x = x;
+    this.px = x;
+    this.py = y;
+    this.fx = 0;
+    this.fy = 0;
+    this.radius = this.height / 5;
     // this.speed = 0.3;
     // this.isFailed = false;
   }
